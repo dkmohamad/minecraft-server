@@ -1,0 +1,44 @@
+# World data (stored separately)
+data/world/
+
+# Server runtime (regenerated on startup)
+data/libraries/
+data/versions/
+data/cache/
+data/logs/
+data/crash-reports/
+data/*.jar
+data/.rcon-cli.yaml
+data/.rcon-cli.env
+data/.paper.env
+data/.papermc-manifest.json
+
+# Plugins (runtime, regenerated)
+data/plugins/
+
+# Player data
+data/usercache.json
+data/banned-ips.json
+data/banned-players.json
+data/ops.json
+data/whitelist.json
+
+# Geyser runtime
+geyser/data/logs/
+geyser/data/cache/
+geyser/data/locales/
+geyser/data/packs/
+geyser/data/saved-refresh-tokens.json
+geyser/data/.var-list-manifest.json
+
+# ViaProxy runtime
+viaproxy/logs/
+viaproxy/ViaLoader/
+viaproxy/viabedrock/
+viaproxy/saves.json
+
+# Backups
+*.bk
+
+# Environment
+.env*

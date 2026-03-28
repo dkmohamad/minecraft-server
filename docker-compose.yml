@@ -1,0 +1,39 @@
+services:
+  mc:
+    image: itzg/minecraft-server:latest
+    pull_policy: daily
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    environment:
+      EULA: "true"
+      TYPE: "VANILLA"
+      VERSION: "26.1"
+      ONLINE_MODE: "false"
+      MOTD: "Truest Survivor"
+    ports:
+      - "25565:25565"
+    volumes:
+      - ./data:/data
+
+  viaproxy:
+    image: ghcr.io/viaversion/viaproxy:latest
+    restart: unless-stopped
+    depends_on:
+      - mc
+    entrypoint: ["java", "-jar", "/app/ViaProxy.jar", "cli"]
+    command: ["--target-address", "mc:25565", "--bind-address", "0.0.0.0:25568", "--proxy-online-mode", "false"]
+    ports:
+      - "25568:25568"
+    volumes:
+      - ./viaproxy:/app/run
+
+  geyser:
+    build: ./geyser
+    restart: unless-stopped
+    depends_on:
+      - viaproxy
+    ports:
+      - "19132:19132/udp"
+    volumes:
+      - ./geyser/data:/data
