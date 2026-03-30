@@ -11,29 +11,46 @@ services:
       VERSION: "26.1"
       ONLINE_MODE: "false"
       MOTD: "Truest Survivor"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
     ports:
       - "25565:25565"
     volumes:
-      - ./data:/data
+      - ./data/minecraft:/data
 
   viaproxy:
     image: ghcr.io/viaversion/viaproxy:latest
     restart: unless-stopped
     depends_on:
       - mc
-    entrypoint: ["java", "-jar", "/app/ViaProxy.jar", "cli"]
-    command: ["--target-address", "mc:25565", "--bind-address", "0.0.0.0:25568", "--proxy-online-mode", "false"]
     ports:
       - "25568:25568"
     volumes:
-      - ./viaproxy:/app/run
+      - ./data/viaproxy:/app/run
 
   geyser:
-    build: ./geyser
+    build:
+      context: .
+      dockerfile: geyser.Dockerfile
     restart: unless-stopped
     depends_on:
       - viaproxy
     ports:
       - "19132:19132/udp"
     volumes:
-      - ./geyser/data:/data
+      - ./data/geyser:/data
+
+  backup:
+    image: itzg/mc-backup
+    restart: unless-stopped
+    depends_on:
+      - mc
+    environment:
+      BACKUP_INTERVAL: "24h"
+      RCON_HOST: mc
+      RCON_PORT: "25575"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
+      DEST_DIR: /backups
+      KEEP_COUNT: "7"
+    volumes:
+      - ./data/minecraft:/data:ro
+      - ./data/backups:/backups

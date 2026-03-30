@@ -236,7 +236,7 @@ advanced:
 enable-metrics: true
 
 # The bstats metrics uuid. Do not touch!
-metrics-uuid: GENERATE_NEW_UUID
+metrics-uuid: 00000000-0000-0000-0000-000000000000
 
 # If debug messages should be sent through console
 debug-mode: true
