@@ -1,0 +1,34 @@
+{
+  "files.associations": {
+    "*.Dockerfile": "dockerfile",
+    "docker-compose*.yml": "dockercompose",
+    "server.properties": "properties"
+  },
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json": "docker-compose*.yml"
+  },
+  "cSpell.words": [
+    "aikar",
+    "bedrock",
+    "chunker",
+    "crossplay",
+    "dockerfile",
+    "floodgate",
+    "gamerule",
+    "geyser",
+    "hostnames",
+    "itzg",
+    "keepInventory",
+    "mojang",
+    "motd",
+    "netplan",
+    "plusnet",
+    "raknet",
+    "rcon",
+    "tcpdump",
+    "temurin",
+    "ulnp",
+    "viaproxy",
+    "viaversion"
+  ]
+}
