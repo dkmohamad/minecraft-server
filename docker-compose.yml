@@ -1,7 +1,9 @@
 services:
+  # NOTE: images pinned by digest to freeze the working version chain for the party.
+  # Captured 2026-06-20 from the running, verified-healthy stack. See notes.md "Frozen versions".
   mc:
-    image: itzg/minecraft-server:latest
-    pull_policy: daily
+    image: itzg/minecraft-server:latest@sha256:847b459c2bc263fe31838eb0b4e3d321d851b9071d94f658439ec53f2db57e6b
+    pull_policy: never
     tty: true
     stdin_open: true
     restart: unless-stopped
@@ -18,7 +20,8 @@ services:
       - ./data/minecraft:/data
 
   viaproxy:
-    image: ghcr.io/viaversion/viaproxy:latest
+    image: ghcr.io/viaversion/viaproxy:latest@sha256:34c8515246b7abce1f0fc73ce33228017bcab087f18debe7cbc58dc554881668
+    pull_policy: never
     restart: unless-stopped
     depends_on:
       - mc
@@ -40,7 +43,8 @@ services:
       - ./data/geyser:/data
 
   backup:
-    image: itzg/mc-backup
+    image: itzg/mc-backup:latest@sha256:5d2c1fb80f4a225927e6ff05305d915ee2866bc320dd999f23373360cf88bd40
+    pull_policy: never
     restart: unless-stopped
     depends_on:
       - mc

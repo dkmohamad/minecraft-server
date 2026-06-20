@@ -3,9 +3,14 @@
 ## Quick Reference
 - **Server**: Vanilla 26.1 in Docker (`itzg/minecraft-server`)
 - **World**: Original "Truest Survivor" from `~/Documents/.minecraft/saves/`
-- **Dev machine**: `<dev-machine-ip>` (Ethernet) / `<dev-machine-wifi-ip>` (Wi-Fi)
+- **Dev machine**: `192.168.1.252` (Ethernet `enp10s0`, DHCP, gateway 192.168.1.254 — Plusnet Hub)
 - **iPad**: Bedrock v26.10, IP varies
 - **Ports**: MC 25565/tcp, ViaProxy 25568/tcp, Geyser 19132/udp
+
+---
+
+> **Version pins and deploy/rollback procedures live in [deployment.md](deployment.md).** This
+> file is the dev/decision log — what was tried, ruled out, and why.
 
 ---
 
@@ -65,6 +70,21 @@
 - **Root cause**: Server address was set to hostname instead of IP. Bedrock client can't resolve local hostnames.
 - **Fix**: Use IP address (not hostname) when adding server on Bedrock clients
 - **Result**: Both accounts (<player-1> + daughter's profile) can connect simultaneously
+
+### D8: Clients auto-updated past the bridge — bumped Geyser + ViaProxy (2026-06-20)
+- **Problem**: Party-day clients had updated ahead of the original bridge. iPad **Bedrock 26.21**
+  was rejected with *"Outdated Geyser proxy! This server supports … 26.10"* (Geyser `2.9.5-b1107`
+  topped out at Bedrock 26.10); the Linux **Java 26.2** client exceeded ViaProxy's max of 26.1 (775).
+- **Ruled out**: upgrading MC / the world to chase the clients (forces a world-format upgrade,
+  risks the save) and downgrading clients (Bedrock auto-updates, can't easily pin).
+- **Decision**: update ONLY the translation layer, keep MC + world native at 26.1.
+  - Geyser `2.9.5-b1107` → `2.10.1-b1172` — adds Bedrock 26.21.
+  - ViaProxy → newer pinned digest — now reports highest supported 26.2 (776).
+  - Side effect: the new Geyser emulates Java 26.1 (not 1.21.11), so the chain is now almost
+    native (`[26.1 <-> 26.1]` in ViaProxy logs).
+- **Result**: WORKING. iPad Bedrock 26.21 joined the live world (`ThunderMo3000`); world visible
+  from Xbox. Java path not tested (not needed for this event).
+- Current pins: `docker-compose.yml` / `geyser.Dockerfile`. Deploy history: [deployment.md](deployment.md).
 
 ---
 
